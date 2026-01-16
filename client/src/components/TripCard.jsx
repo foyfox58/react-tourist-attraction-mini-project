@@ -26,7 +26,7 @@ const TripCard = ({ trip, onTagClick }) => {
     <div className="relative bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md">
       <div className="flex gap-4">
         {/* รูปใหญ่ซ้าย */}
-        <div className="w-72 shrink-0">
+        <div className="w-72 h-52 shrink-0">
           {mainImage ? (
             <img
               src={mainImage}
