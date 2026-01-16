@@ -1,14 +1,17 @@
-import TagList from "./TagList";
-import TripImageGallery from "./TripImageGallery";
 import { Link } from "lucide-react";
+import TagList from "./TagList";
 
-const truncateDescription = (text = "", maxLength = 100) => {
+const truncateDescription = (text = "", maxLength = 120) => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
 
 const TripCard = ({ trip, onTagClick }) => {
   if (!trip) return null;
+
+  const photos = trip.photos || [];
+  const mainImage = photos[0];
+  const thumbnails = photos.slice(1, 4);
 
   const handleReadMore = () => {
     window.open(trip.url, "_blank");
@@ -20,17 +23,25 @@ const TripCard = ({ trip, onTagClick }) => {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-4">
-        {/* Image */}
-        <TripImageGallery
-          photos={trip.photos || []}
-          title={trip.title}
-        />
+    <div className="relative bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md">
+      <div className="flex gap-4">
+        {/* รูปใหญ่ซ้าย */}
+        <div className="w-72 shrink-0">
+          {mainImage ? (
+            <img
+              src={mainImage}
+              alt={trip.title}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 rounded-lg" />
+          )}
+        </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-semibold mb-2">
+        {/* Content ขวา */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Title */}
+          <h2 className="text-lg font-semibold">
             <a
               href={trip.url}
               target="_blank"
@@ -41,29 +52,48 @@ const TripCard = ({ trip, onTagClick }) => {
             </a>
           </h2>
 
-          <p className="text-gray-600 text-sm mb-2">
+          {/* Description */}
+          <p className="text-gray-600 text-sm mt-1">
             {truncateDescription(trip.description)}
           </p>
 
+          {/* อ่านต่อ */}
           <button
             onClick={handleReadMore}
-            className="text-blue-600 text-sm hover:underline mb-2"
+            className="text-red-500 text-sm underline hover:decoration-1 mt-1 self-start"
           >
             อ่านต่อ
           </button>
 
-          <TagList tags={trip.tags || []} onTagClick={onTagClick} />
-        </div>
+          {/* หมวด */}
+          <div className="mt-2">
+            <TagList tags={trip.tags || []} onTagClick={onTagClick} />
+          </div>
 
-        {/* Copy link icon (RIGHT SIDE) */}
-        <button
-          onClick={handleCopyLink}
-          title="คัดลอกลิงก์"
-          className="shrink-0 text-blue-600 hover:text-blue-800 transition-colors"
-        >
-          <Link size={20} />
-        </button>
+          {/* รูปเล็กด้านล่าง */}
+          {thumbnails.length > 0 && (
+            <div className="flex gap-2 mt-3">
+              {thumbnails.map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo}
+                  alt={`${trip.title}-${index}`}
+                  className="w-24 h-16 object-cover rounded-md"
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* 🔵 icon คัดลอกลิงก์ มุมล่างขวา */}
+      <button
+        onClick={handleCopyLink}
+        title="คัดลอกลิงก์"
+        className="absolute bottom-4 right-4 text-blue-600 hover:text-blue-800"
+      >
+        <Link size={20} />
+      </button>
     </div>
   );
 };
