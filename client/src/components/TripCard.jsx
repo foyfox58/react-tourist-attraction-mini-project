@@ -1,5 +1,6 @@
 import TagList from "./TagList";
 import TripImageGallery from "./TripImageGallery";
+import { Link } from "lucide-react";
 
 const truncateDescription = (text = "", maxLength = 100) => {
   if (text.length <= maxLength) return text;
@@ -19,13 +20,15 @@ const TripCard = ({ trip, onTagClick }) => {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md">
-      <div className="flex gap-4">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-4">
+        {/* Image */}
         <TripImageGallery
           photos={trip.photos || []}
           title={trip.title}
         />
 
+        {/* Content */}
         <div className="flex-1 min-w-0">
           <h2 className="text-lg font-semibold mb-2">
             <a
@@ -42,24 +45,24 @@ const TripCard = ({ trip, onTagClick }) => {
             {truncateDescription(trip.description)}
           </p>
 
-          <div className="flex gap-4 mb-2">
-            <button
-              onClick={handleReadMore}
-              className="text-blue-600 text-sm hover:underline"
-            >
-              อ่านต่อ
-            </button>
-
-            <button
-              onClick={handleCopyLink}
-              className="text-blue-600 text-sm hover:underline"
-            >
-              คัดลอกลิงก์
-            </button>
-          </div>
+          <button
+            onClick={handleReadMore}
+            className="text-blue-600 text-sm hover:underline mb-2"
+          >
+            อ่านต่อ
+          </button>
 
           <TagList tags={trip.tags || []} onTagClick={onTagClick} />
         </div>
+
+        {/* Copy link icon (RIGHT SIDE) */}
+        <button
+          onClick={handleCopyLink}
+          title="คัดลอกลิงก์"
+          className="shrink-0 text-blue-600 hover:text-blue-800 transition-colors"
+        >
+          <Link size={20} />
+        </button>
       </div>
     </div>
   );
