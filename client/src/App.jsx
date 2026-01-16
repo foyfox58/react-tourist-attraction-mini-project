@@ -1,7 +1,7 @@
-import "./App.css";
+import Index from "./pages/Index";
 
 function App() {
-  return <div className="App">{/* Start coding here */}</div>;
+  return <Index />;
 }
 
 export default App;
